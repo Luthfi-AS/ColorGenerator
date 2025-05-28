@@ -9,70 +9,11 @@ import base64
 
 # Konfigurasi halaman
 st.set_page_config(
-    page_title="Color Palette Generator",
-    page_icon="🎨",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
-
-# Custom CSS untuk styling
-st.markdown("""
-<style>
-    .main {
-        padding-top: 2rem;
-    }
-    
-   
-    
-    .main-header {
-        text-align: center;
-        background: linear-gradient(135deg, #4f46e5, #7c3aed);
-        color: white;
-        padding: 2rem;
-        border-radius: 15px;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    
-    .color-box {
-        display: inline-block;
-        width: 120px;
-        height: 120px;
-        margin: 10px;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        border: 3px solid white;
-        text-align: center;
-        vertical-align: top;
-    }
-    
-    .color-info {
-        background: white;
-        padding: 10px;
-        border-radius: 0 0 12px 12px;
-        font-weight: bold;
-        font-size: 12px;
-        color: #333;
-    }
-    
-    .palette-container {
-        background: rgba(255,255,255,0.95);
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        backdrop-filter: blur(10px);
-    }
-    
-    .metric-container {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        padding: 1rem;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
-        margin: 0.5rem 0;
-    }
-</style>
-""", unsafe_allow_html=True)
+        page_title="Color Palette Generator",
+        page_icon="🎨",
+        layout="wide",
+        initial_sidebar_state="collapsed"
+    )
 
 def rgb_to_hex(rgb):
     """Konversi RGB ke format HEX"""
@@ -119,17 +60,20 @@ def display_color_palette(color_data):
         hex_color = rgb_to_hex(color)
         rgb_str = f"rgb({int(color[0])}, {int(color[1])}, {int(color[2])})"
         
-        html_content += f"""
-        <div class="color-box" style="background-color: {hex_color};">
-            <div style="height: 80px; display: flex; align-items: center; justify-content: center; color: {'white' if sum(color) < 400 else 'black'};">
-                <strong>#{i+1}</strong>
-            </div>
-            <div class="color-info">
-                <div>{hex_color.upper()}</div>
-                <div>{int(percentage):.1f}%</div>
-            </div>
-        </div>
-        """
+        html_content += (
+            f"<div class='color-box' style='background-color: {hex_color};'>"
+            f"<div style='height: 80px; display: flex; align-items: center; justify-content: center; color: {'white' if sum(color) < 400 else 'black'};'>"
+            f"<strong>#{i+1}</strong>"
+            f"</div>"
+            f"<div class='color-info'>"
+            f"<div>{hex_color.upper()}</div>"
+            f"<div>{int(percentage):.1f}%</div>"
+            f"</div>"
+            f"</div>"
+        )
+
+        
+        
     
     html_content += "</div>"
     return html_content
@@ -180,12 +124,72 @@ def create_palette_image(color_data):
     return buf
 
 def main():
+    
+
     # Header utama
     st.markdown("""
     <div class="main-header">
         <h1>🎨 Color Palette Generator</h1>
         <p>Ekstrak 5 warna dominan dari gambar Anda dengan teknologi AI</p>
     </div>
+    """, unsafe_allow_html=True)
+
+    
+    # Custom CSS untuk styling
+    st.markdown("""
+    <style>
+        .main {
+            padding-top: 2rem;
+        }
+        
+        .main-header {
+            text-align: center;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .color-box {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 3px solid white;
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .color-info {
+            background: white;
+            padding: 10px;
+            border-radius: 0 0 12px 12px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .palette-container {
+            background: rgba(255,255,255,0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .metric-container {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+    </style>
     """, unsafe_allow_html=True)
     
     # Upload gambar
@@ -207,7 +211,7 @@ def main():
             if image.size[0] > 800 or image.size[1] > 800:
                 image.thumbnail((800, 800), Image.Resampling.LANCZOS)
             
-            st.image(image, use_column_width=True, caption="Gambar yang dianalisis")
+            st.image(image, use_container_width=True, caption="Gambar yang dianalisis")
             
             # Info gambar
             st.markdown(f"""
